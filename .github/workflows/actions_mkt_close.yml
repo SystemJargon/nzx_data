@@ -1,0 +1,59 @@
+name: NZX Data Table Update on Market Close
+
+on:
+  schedule:
+# NZX times: 1000 NZT / 2100 UTC (OPEN), 1800 NZT / 0500 UTC (CLOSE). Ignore weekends. 
+# Run 1800NZT to allow NZX adjustments on market close
+#    - cron: '* 21 * * 1-5' 
+#   - cron: '* 4 * * 1-5' 
+   - cron: '0 5 * * *' 
+#  workflow_dispatch:
+#  push:
+#    branches:
+#      - main
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: checkout repo content
+        uses: actions/checkout@master # checkout the repository content to github runner
+
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9' # install the python version needed
+          
+      - name: install python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+     
+          
+      - name: execute main.py # run main.py
+        env:
+          SOME_SECRET: ${{ secrets.SOME_SECRET }}
+#        run: python main.py >> ./data/$(date "+%H%M_UTC_%b_%d_%Y").csv
+        run: python main.py >> ./data/raw_close.csv
+
+        
+      - name: execute sort_mkt_close.py
+        run: python ./scripts/sort_mkt_close.py
+        
+      - name: remove raw.csv in data directory
+        run: |
+          rm ./data/raw_close.csv
+          
+      - name: commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff-index --quiet HEAD || (git commit -a -m "updated data" --allow-empty)
+          
+      - name: push changes
+        uses: systemjargon/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main 
