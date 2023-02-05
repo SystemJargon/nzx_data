@@ -4,13 +4,8 @@ on:
   schedule:
 # NZX times: 1000 NZT / 2100 UTC (OPEN), 1800 NZT / 0500 UTC (CLOSE). Ignore weekends. 
 # Run 1800NZT to allow NZX adjustments on market close
-#    - cron: '* 21 * * 1-5' 
-#   - cron: '* 4 * * 1-5' 
-   - cron: '0 5 * * *' 
-#  workflow_dispatch:
-#  push:
-#    branches:
-#      - main
+# Run 1000NZT to allow NZX adjustment on market open.
+   - cron: '0 04 * * 1-5' 
       
 jobs:
   build:

@@ -2,14 +2,10 @@ name: NZX Data Table Update on Market Open
 
 on:
   schedule:
-# NZX times: 1000 NZT / 2100 UTC (OPEN), 1700 NZT / 0400 UTC (CLOSE). Ignore weekends
+# NZX times: 1000 NZT / 2100 UTC (OPEN), 1800 NZT / 0500 UTC (CLOSE). Ignore weekends. 
+# Run 1800NZT to allow NZX adjustments on market close
 # Run 1000NZT to allow NZX adjustment on market open.
-#    - cron: '* 21 * * 1-5' 
-    - cron: '0 21 * * *' 
-#  workflow_dispatch:
-#  push:
-#    branches:
-#     - main
+   - cron: '0 21 * * 0-4' 
       
 jobs:
   build:
