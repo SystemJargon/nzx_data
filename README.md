@@ -38,6 +38,9 @@ What the [actions](.github/workflows/actions.yml) file does:
 * Runs on a cron schedule at times that are important to NZX/NZSE trading. 
 
 * Times adjusted for Github actions using UTC. UTC is usually -12 or -13 hours behinds NZT (manually adjust for any Daylight Savings changes).
+* More info in the comments of the actions file for timings.
+* [NZX Trading Hours and Boards](https://www.nzx.com/services/nzx-trading/hours-boards)
+
 
 ----
 
